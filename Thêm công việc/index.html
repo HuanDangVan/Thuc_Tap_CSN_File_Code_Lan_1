@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý cá nhân</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header"><a class="logo" href="index.html">SCHEDULE STUDENT</a><h1>Quản lý cá nhân</h1><span class="user">Sinh viên</span></header>
+<main class="container">
+<div class="page-heading"><div><h2>Công việc và lịch học</h2><p>Theo dõi công việc cá nhân và thời khóa biểu của bạn.</p></div><a class="button" href="tao.html">+ Thêm mới</a></div>
+<section class="panel"><h3>Danh sách công việc</h3><div class="table-wrap"><table><thead><tr><th>Tên công việc</th><th>Hạn hoàn thành</th><th>Ưu tiên</th><th>Trạng thái</th></tr></thead><tbody id="taskList">
+<tr><td>Hoàn thành bài tập HTML</td><td>2026-10-12</td><td><span class="tag high">Cao</span></td><td>Đang thực hiện</td></tr>
+<tr><td>Ôn tập môn An ninh mạng</td><td>2026-10-14</td><td><span class="tag medium">Trung bình</span></td><td>Chưa hoàn thành</td></tr>
+<tr><td>Bài tập Thiết kế Web</td><td>2026-10-15</td><td><span class="tag low">Thấp</span></td><td>Chưa hoàn thành</td></tr>
+
+</tbody></table></div></section>
+<section class="panel"><h3>Lịch học</h3><div class="table-wrap"><table><thead><tr><th>Tên môn học</th><th>Ngày học</th><th>Thời gian</th><th>Phòng học</th></tr></thead><tbody id="courseList">
+<tr><td>Lập trình hướng đối tượng</td><td>Thứ Hai</td><td>07:00 - 09:30</td><td>1405A1</td></tr>
+<tr><td>An ninh mạng</td><td>Thứ Tư</td><td>12:30 - 15:00</td><td>303A9</td></tr>
+</tbody></table></div></section>
+</main>
+<script>
+
+const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+const courses = JSON.parse(localStorage.getItem("courses") || "[]");
+
+const taskList = document.getElementById("taskList");
+
+tasks.forEach(task => {
+    const row = document.createElement("tr");
+
+    // Tên công việc
+    const title = document.createElement("td");
+    title.textContent = task.title || "-";
+    row.appendChild(title);
+
+    // Hạn hoàn thành
+    const date = document.createElement("td");
+    date.textContent = task.endDate || "-";
+    row.appendChild(date);
+
+    // Mức độ ưu tiên có màu
+    const priorityCell = document.createElement("td");
+    const tag = document.createElement("span");
+
+    tag.className = "tag ";
+    if (task.priority === "Cao") {
+        tag.className += "high";
+    } else if (task.priority === "Trung bình") {
+        tag.className += "medium";
+    } else {
+        tag.className += "low";
+    }
+
+    tag.textContent = task.priority || "-";
+    priorityCell.appendChild(tag);
+    row.appendChild(priorityCell);
+
+    // Trạng thái
+    const status = document.createElement("td");
+    status.textContent = "Chưa hoàn thành";
+    row.appendChild(status);
+
+    taskList.appendChild(row);
+});
+
+// Hiển thị lịch học
+const courseList = document.getElementById("courseList");
+
+courses.forEach(course => {
+    const row = document.createElement("tr");
+
+    [course.name, course.date, course.time, course.room].forEach(value => {
+        const cell = document.createElement("td");
+        cell.textContent = value || "-";
+        row.appendChild(cell);
+    });
+
+    courseList.appendChild(row);
+});
+
+</script>
+</body></html>

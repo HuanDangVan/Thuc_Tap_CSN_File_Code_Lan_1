@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân - SCHEDULE STUDENT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="profile-layout">
+
+        <!-- Thanh menu bên trái -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h2>SCHEDULE STUDENT</h2>
+                <p>Quản lý công việc sinh viên</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="profile.html" class="active">
+                    Hồ sơ cá nhân
+                </a>
+
+                <a href="tasks.html">
+                    Công việc của tôi
+                </a>
+
+                <a href="logout.html">
+                    Đăng xuất
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Nội dung chính -->
+        <main class="profile-main">
+            <header class="page-header">
+                <div>
+                    <h1>Hồ sơ cá nhân</h1>
+                    <p>Quản lý thông tin tài khoản của bạn</p>
+                </div>
+            </header>
+
+            <section class="profile-card">
+                <div class="profile-summary">
+                    <div class="profile-avatar" id="profileAvatar">
+                        U
+                    </div>
+
+                    <div>
+                        <h2 id="displayName">Người dùng</h2>
+                        <p id="displayEmail">Chưa có email</p>
+                    </div>
+                </div>
+
+                <div id="profileMessage" class="message"></div>
+
+                <form id="profileForm">
+                    <div class="profile-form-grid">
+
+                        <div class="form-group">
+                            <label for="HoTen">Họ và tên</label>
+                            <input
+                                type="text"
+                                id="HoTen"
+                                name="HoTen"
+                                maxlength="100"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Email">Email tài khoản</label>
+                            <input
+                                type="email"
+                                id="Email"
+                                name="Email"
+                                readonly
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="NgaySinh">Ngày sinh</label>
+                            <input
+                                type="date"
+                                id="NgaySinh"
+                                name="NgaySinh"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="GioiTinh">Giới tính</label>
+                            <select id="GioiTinh" name="GioiTinh">
+                                <option value="">-- Chọn giới tính --</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="SoDienThoai">Số điện thoại</label>
+                            <input
+                                type="tel"
+                                id="SoDienThoai"
+                                name="SoDienThoai"
+                                placeholder="Nhập số điện thoại"
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="profile-actions">
+                        <button
+                            type="reset"
+                            class="btn-secondary"
+                            id="resetProfile"
+                        >
+                            Hoàn tác
+                        </button>
+
+                        <button type="submit" class="btn-primary">
+                            Lưu thay đổi
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="profile.js"></script>
+</body>
+</html>

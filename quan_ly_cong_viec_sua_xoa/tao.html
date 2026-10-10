@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thêm công việc hoặc lịch học</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header"><a class="logo" href="index.html">SCHEDULE STUDENT</a><h1>Quản lý cá nhân</h1><span class="user">Sinh viên</span></header>
+<main class="container narrow">
+  <a class="back-link" href="index.html">← Quay lại danh sách</a>
+  <h2>Thêm mới</h2><p>Chọn nội dung bạn muốn thêm.</p>
+  <div class="switch-buttons">
+    <button type="button" class="button" onclick="showForm('taskForm')">Thêm công việc</button>
+    <button type="button" class="button secondary" onclick="showForm('courseForm')">Thêm lịch học</button>
+  </div>
+  <section class="panel" id="taskForm">
+    <h3>Thông tin công việc</h3>
+    <form onsubmit="return saveTask(event)">
+      <label for="taskTitle">Tên công việc *</label><input id="taskTitle" required placeholder="Nhập tên công việc">
+      <label for="taskDescription">Mô tả</label><textarea id="taskDescription" rows="3" placeholder="Nhập mô tả công việc"></textarea>
+      <div class="form-grid">
+        <div><label for="taskStart">Ngày bắt đầu *</label><input type="date" id="taskStart" required></div>
+        <div><label for="taskEnd">Hạn hoàn thành *</label><input type="date" id="taskEnd" required></div>
+      </div>
+      <label>Mức độ ưu tiên của công việc *</label>
+      <div class="difficulty-buttons">
+        <button type="button" class="difficulty-btn hard selected" data-priority="Cao" onclick="choosePriority(this)">Cao</button>
+        <button type="button" class="difficulty-btn normal" data-priority="Trung bình" onclick="choosePriority(this)">Trung bình</button>
+        <button type="button" class="difficulty-btn easy" data-priority="Thấp" onclick="choosePriority(this)">Thấp</button>
+      </div>
+      <input type="hidden" id="taskPriority" value="Cao">
+      <div class="form-actions"><button class="button" type="submit">Lưu công việc</button><button class="button secondary" type="reset" onclick="resetPriority()">Nhập lại</button></div>
+    </form>
+  </section>
+  <section class="panel hidden" id="courseForm">
+    <h3>Thông tin lịch học</h3>
+    <form onsubmit="return saveCourse(event)">
+      <label for="courseName">Tên môn học *</label><input id="courseName" required placeholder="Nhập tên môn học">
+      <label for="courseDate">Ngày học *</label><input type="date" id="courseDate" required>
+      <div class="form-grid"><div><label for="courseTime">Thời gian *</label><input id="courseTime" required placeholder="Ví dụ: 07:00 - 09:30"></div><div><label for="courseRoom">Phòng học</label><input id="courseRoom" placeholder="Ví dụ: A101"></div></div>
+      <label for="courseDescription">Ghi chú</label><textarea id="courseDescription" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
+      <div class="form-actions"><button class="button" type="submit">Lưu lịch học</button><button class="button secondary" type="reset">Nhập lại</button></div>
+    </form>
+  </section>
+</main>
+<script>
+function showForm(id) {
+  document.getElementById("taskForm").classList.toggle("hidden", id !== "taskForm");
+  document.getElementById("courseForm").classList.toggle("hidden", id !== "courseForm");
+}
+function choosePriority(button) {
+  document.querySelectorAll(".difficulty-btn").forEach(item => item.classList.remove("selected"));
+  button.classList.add("selected");
+  document.getElementById("taskPriority").value = button.dataset.priority;
+}
+function resetPriority() {
+  setTimeout(() => {
+    document.querySelectorAll(".difficulty-btn").forEach(item => item.classList.toggle("selected", item.dataset.priority === "Cao"));
+    document.getElementById("taskPriority").value = "Cao";
+  }, 0);
+}
+function saveTask(event) {
+  event.preventDefault();
+  const title = document.getElementById("taskTitle").value.trim();
+  const startDate = document.getElementById("taskStart").value;
+  const endDate = document.getElementById("taskEnd").value;
+  if (endDate < startDate) { alert("Hạn hoàn thành không được trước ngày bắt đầu!"); return false; }
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+  tasks.push({
+    id: Date.now(),
+    title,
+    description: document.getElementById("taskDescription").value.trim(),
+    startDate,
+    endDate,
+    priority: document.getElementById("taskPriority").value,
+    status: "Chưa hoàn thành"
+  });
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  localStorage.setItem("tasksInitialized", "yes");
+  window.location.href = "thanhcong.html?type=task";
+  return false;
+}
+function saveCourse(event) {
+  event.preventDefault();
+  const courses = JSON.parse(localStorage.getItem("courses") || "[]");
+  courses.push({
+    name: document.getElementById("courseName").value.trim(),
+    date: document.getElementById("courseDate").value,
+    time: document.getElementById("courseTime").value.trim(),
+    room: document.getElementById("courseRoom").value.trim(),
+    description: document.getElementById("courseDescription").value.trim()
+  });
+  localStorage.setItem("courses", JSON.stringify(courses));
+  window.location.href = "thanhcong.html?type=course";
+  return false;
+}
+</script>
+</body>
+</html>

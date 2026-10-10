@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý công việc - QLCVSV</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="profile-layout">
+
+        <!-- Thanh menu bên trái -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h2>QLCVSV</h2>
+                <p>Quản lý công việc sinh viên</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="profile.html">Hồ sơ cá nhân</a>
+                <a href="tasks.html" class="active">Công việc của tôi</a>
+                <a href="logout.html">Đăng xuất</a>
+            </nav>
+        </aside>
+
+        <!-- Nội dung chính -->
+        <main class="profile-main">
+
+            <header class="page-header">
+                <h1>Quản lý công việc</h1>
+                <p>Theo dõi và quản lý các công việc cá nhân của bạn.</p>
+            </header>
+
+            <!-- Thống kê công việc -->
+            <section class="task-statistics">
+                <div class="task-stat-card">
+                    <p>Tổng công việc</p>
+                    <h2 id="totalTasks">0</h2>
+                </div>
+
+                <div class="task-stat-card">
+                    <p>Chưa hoàn thành</p>
+                    <h2 id="pendingTasks">0</h2>
+                </div>
+
+                <div class="task-stat-card">
+                    <p>Đã hoàn thành</p>
+                    <h2 id="completedTasks">0</h2>
+                </div>
+            </section>
+
+            <!-- Form thêm công việc -->
+            <section class="profile-card task-form-card">
+                <h2 class="section-title">Thêm công việc mới</h2>
+
+                <div id="taskMessage" class="message"></div>
+
+                <form id="taskForm">
+                    <div class="form-group">
+                        <label for="TenCongViec">Tên công việc</label>
+                        <input
+                            type="text"
+                            id="TenCongViec"
+                            placeholder="Ví dụ: Làm bài tập Java"
+                            maxlength="200"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="MoTa">Mô tả</label>
+                        <textarea
+                            id="MoTa"
+                            placeholder="Nhập nội dung công việc..."
+                        ></textarea>
+                    </div>
+
+                    <div class="task-form-grid">
+                        <div class="form-group">
+                            <label for="HanHoanThanh">Hạn hoàn thành</label>
+                            <input
+                                type="date"
+                                id="HanHoanThanh"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="MucDoUuTien">Mức độ ưu tiên</label>
+                            <select id="MucDoUuTien" required>
+                                <option value="Thấp">Thấp</option>
+                                <option value="Trung bình" selected>
+                                    Trung bình
+                                </option>
+                                <option value="Cao">Cao</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="TrangThai">Trạng thái</label>
+                            <select id="TrangThai">
+                                <option value="Chưa hoàn thành">
+                                    Chưa hoàn thành
+                                </option>
+                                <option value="Đã hoàn thành">
+                                    Đã hoàn thành
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">
+                        Thêm công việc
+                    </button>
+                </form>
+            </section>
+
+            <!-- Danh sách công việc -->
+            <section class="profile-card task-list-card">
+                <h2 class="section-title">Danh sách công việc</h2>
+
+                <div class="task-filters">
+                    <input
+                        type="search"
+                        id="searchTask"
+                        placeholder="Tìm kiếm công việc..."
+                    >
+
+                    <select id="filterStatus">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="Chưa hoàn thành">
+                            Chưa hoàn thành
+                        </option>
+                        <option value="Đã hoàn thành">
+                            Đã hoàn thành
+                        </option>
+                    </select>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên công việc</th>
+                                <th>Hạn hoàn thành</th>
+                                <th>Ưu tiên</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="taskTableBody">
+                            <tr>
+                                <td colspan="6">
+                                    Chưa có công việc nào.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="tasks.js"></script>
+</body>
+</html>

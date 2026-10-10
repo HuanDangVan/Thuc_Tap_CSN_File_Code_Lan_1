@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thành công</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header"><a class="logo" href="index.html">SCHEDULE STUDENT</a><h1>Quản lý cá nhân</h1><span class="user">Sinh viên</span></header>
+<main class="container narrow"><section class="panel success-panel">
+<div class="checkmark">✓</div><h2 id="successTitle">THAO TÁC THÀNH CÔNG!</h2><p id="successMessage">Thông tin của bạn đã được lưu.</p>
+<div class="form-actions center"><a class="button" href="index.html">Về danh sách</a><a class="button secondary" href="tao.html">Thêm tiếp</a></div>
+</section></main>
+<script>
+const type = new URLSearchParams(window.location.search).get("type");
+if (type === "task") {
+  document.getElementById("successTitle").textContent = "THÊM CÔNG VIỆC THÀNH CÔNG!";
+  document.getElementById("successMessage").textContent = "Công việc đã được lưu vào danh sách.";
+} else if (type === "course") {
+  document.getElementById("successTitle").textContent = "THÊM LỊCH HỌC THÀNH CÔNG!";
+  document.getElementById("successMessage").textContent = "Lịch học đã được lưu vào danh sách.";
+} else if (type === "edit") {
+  document.getElementById("successTitle").textContent = "SỬA CÔNG VIỆC THÀNH CÔNG!";
+  document.getElementById("successMessage").textContent = "Thông tin công việc đã được cập nhật.";
+}
+</script>
+</body>
+</html>

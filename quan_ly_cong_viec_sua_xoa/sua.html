@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sửa công việc</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header"><a class="logo" href="index.html">SCHEDULE STUDENT</a><h1>Quản lý cá nhân</h1><span class="user">Sinh viên</span></header>
+<main class="container narrow">
+  <a class="back-link" href="index.html">← Quay lại danh sách</a>
+  <h2>Sửa công việc</h2>
+  <p>Chỉnh sửa thông tin công việc rồi nhấn “Lưu thay đổi”.</p>
+  <section class="panel">
+    <form id="editForm">
+      <label for="taskTitle">Tên công việc *</label>
+      <input id="taskTitle" required placeholder="Nhập tên công việc">
+      <label for="taskDescription">Mô tả</label>
+      <textarea id="taskDescription" rows="3" placeholder="Nhập mô tả công việc"></textarea>
+      <div class="form-grid">
+        <div><label for="taskStart">Ngày bắt đầu *</label><input type="date" id="taskStart" required></div>
+        <div><label for="taskEnd">Hạn hoàn thành *</label><input type="date" id="taskEnd" required></div>
+      </div>
+      <label>Mức độ ưu tiên *</label>
+      <div class="difficulty-buttons">
+        <button type="button" class="difficulty-btn hard" data-priority="Cao" onclick="choosePriority(this)">Cao</button>
+        <button type="button" class="difficulty-btn normal" data-priority="Trung bình" onclick="choosePriority(this)">Trung bình</button>
+        <button type="button" class="difficulty-btn easy" data-priority="Thấp" onclick="choosePriority(this)">Thấp</button>
+      </div>
+      <input type="hidden" id="taskPriority" value="Cao">
+      <label for="taskStatus">Trạng thái</label>
+      <select id="taskStatus">
+        <option>Chưa hoàn thành</option>
+        <option>Đang thực hiện</option>
+        <option>Đã hoàn thành</option>
+      </select>
+      <div class="form-actions">
+        <button class="button" type="submit">Lưu thay đổi</button>
+        <a class="button secondary" href="index.html">Hủy</a>
+      </div>
+    </form>
+  </section>
+</main>
+<script>
+const taskId = new URLSearchParams(window.location.search).get("id");
+let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+const task = tasks.find(item => String(item.id) === String(taskId));
+
+if (!task) {
+  alert("Không tìm thấy công việc cần sửa.");
+  window.location.href = "index.html";
+} else {
+  document.getElementById("taskTitle").value = task.title || "";
+  document.getElementById("taskDescription").value = task.description || "";
+  document.getElementById("taskStart").value = task.startDate || "";
+  document.getElementById("taskEnd").value = task.endDate || "";
+  document.getElementById("taskPriority").value = task.priority || "Cao";
+  document.getElementById("taskStatus").value = task.status || "Chưa hoàn thành";
+  document.querySelectorAll(".difficulty-btn").forEach(button => {
+    if (button.dataset.priority === (task.priority || "Cao")) button.classList.add("selected");
+  });
+}
+
+function choosePriority(button) {
+  document.querySelectorAll(".difficulty-btn").forEach(item => item.classList.remove("selected"));
+  button.classList.add("selected");
+  document.getElementById("taskPriority").value = button.dataset.priority;
+}
+
+document.getElementById("editForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+  const startDate = document.getElementById("taskStart").value;
+  const endDate = document.getElementById("taskEnd").value;
+  if (endDate < startDate) {
+    alert("Hạn hoàn thành không được trước ngày bắt đầu!");
+    return;
+  }
+  const index = tasks.findIndex(item => String(item.id) === String(taskId));
+  if (index === -1) {
+    alert("Không tìm thấy công việc cần sửa.");
+    window.location.href = "index.html";
+    return;
+  }
+  tasks[index] = {
+    ...tasks[index],
+    title: document.getElementById("taskTitle").value.trim(),
+    description: document.getElementById("taskDescription").value.trim(),
+    startDate,
+    endDate,
+    priority: document.getElementById("taskPriority").value,
+    status: document.getElementById("taskStatus").value
+  };
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  window.location.href = "thanhcong.html?type=edit";
+});
+</script>
+</body>
+</html>

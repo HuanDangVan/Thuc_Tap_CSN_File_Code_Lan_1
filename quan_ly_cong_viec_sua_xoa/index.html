@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý cá nhân</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+  <a class="logo" href="index.html">SCHEDULE STUDENT</a>
+  <h1>Quản lý cá nhân</h1>
+  <span class="user">Sinh viên</span>
+</header>
+<main class="container">
+  <div class="page-heading">
+    <div><h2>Công việc và lịch học</h2><p>Theo dõi công việc cá nhân và thời khóa biểu của bạn.</p></div>
+    <a class="button" href="tao.html">+ Thêm mới</a>
+  </div>
+
+  <section class="panel">
+    <h3>Danh sách công việc</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tên công việc</th><th>Hạn hoàn thành</th><th>Ưu tiên</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody id="taskList"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Lịch học</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tên môn học</th><th>Ngày học</th><th>Thời gian</th><th>Phòng học</th></tr></thead>
+        <tbody id="courseList"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script>
+function readData(key) {
+  try { return JSON.parse(localStorage.getItem(key) || "[]"); }
+  catch (error) { return []; }
+}
+function saveData(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+// Tạo dữ liệu mẫu lần đầu mở trang.
+let tasks = readData("tasks");
+if (tasks.length === 0 && localStorage.getItem("tasksInitialized") !== "yes") {
+  tasks = [
+    { id: Date.now() + 1, title: "Hoàn thành bài tập HTML", description: "", startDate: "2026-10-10", endDate: "2026-10-12", priority: "Cao", status: "Đang thực hiện" },
+    { id: Date.now() + 2, title: "Ôn tập môn An ninh mạng", description: "", startDate: "2026-10-10", endDate: "2026-10-14", priority: "Trung bình", status: "Chưa hoàn thành" },
+    { id: Date.now() + 3, title: "Bài tập Thiết kế Web", description: "", startDate: "2026-10-10", endDate: "2026-10-15", priority: "Thấp", status: "Chưa hoàn thành" }
+  ];
+  saveData("tasks", tasks);
+  localStorage.setItem("tasksInitialized", "yes");
+}
+// Bổ sung ID cho các công việc cũ được lưu từ phiên bản trước.
+let changed = false;
+tasks.forEach(task => { if (task.id === undefined || task.id === null) { task.id = Date.now() + Math.floor(Math.random() * 100000); changed = true; } });
+if (changed) saveData("tasks", tasks);
+
+function priorityClass(priority) {
+  if (priority === "Cao") return "high";
+  if (priority === "Trung bình") return "medium";
+  return "low";
+}
+function renderTasks() {
+  const list = document.getElementById("taskList");
+  list.innerHTML = "";
+  if (tasks.length === 0) {
+    list.innerHTML = '<tr><td colspan="5" class="empty-message">Chưa có công việc. Nhấn “Thêm mới” để tạo công việc.</td></tr>';
+    return;
+  }
+  tasks.forEach(task => {
+    const row = document.createElement("tr");
+    const title = document.createElement("td");
+    title.textContent = task.title || "-";
+    const date = document.createElement("td");
+    date.textContent = task.endDate || "-";
+    const priority = document.createElement("td");
+    const tag = document.createElement("span");
+    tag.className = "tag " + priorityClass(task.priority);
+    tag.textContent = task.priority || "-";
+    priority.appendChild(tag);
+    const status = document.createElement("td");
+    status.textContent = task.status || "Chưa hoàn thành";
+    const actions = document.createElement("td");
+
+    const editLink = document.createElement("a");
+    editLink.className = "button small";
+    editLink.href = "sua.html?id=" + encodeURIComponent(task.id);
+    editLink.textContent = "Sửa";
+
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "button danger small";
+    deleteButton.textContent = "Xóa";
+    deleteButton.addEventListener("click", () => deleteTask(task.id, task.title));
+
+    actions.append(editLink, deleteButton);
+    row.append(title, date, priority, status, actions);
+    list.appendChild(row);
+  });
+}
+function deleteTask(id, title) {
+  if (!confirm('Bạn có chắc muốn xóa công việc "' + title + '" không?')) return;
+  tasks = tasks.filter(task => String(task.id) !== String(id));
+  saveData("tasks", tasks);
+  renderTasks();
+  alert("Đã xóa công việc.");
+}
+function renderCourses() {
+  const courses = readData("courses");
+  const list = document.getElementById("courseList");
+  list.innerHTML = "";
+  if (courses.length === 0) {
+    list.innerHTML = '<tr><td colspan="4" class="empty-message">Chưa có lịch học được thêm.</td></tr>';
+    return;
+  }
+  courses.forEach(course => {
+    const row = document.createElement("tr");
+    [course.name, course.date, course.time, course.room].forEach(value => {
+      const cell = document.createElement("td");
+      cell.textContent = value || "-";
+      row.appendChild(cell);
+    });
+    list.appendChild(row);
+  });
+}
+renderTasks();
+renderCourses();
+</script>
+</body>
+</html>
